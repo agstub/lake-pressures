@@ -95,7 +95,9 @@ x1 = x1[x1>0]
 index = BamgTriangulate(x1, y1)
 T_ = InterpFromMeshToMesh2d(index, x1, y1, T_, md.mesh.x, md.mesh.y)
 
-md.initialization.temperature = T_
+# set mean ice temperature to be (T_surf + T_base)/2
+# where T_base is the melting point 
+md.initialization.temperature = 0.5*(T_ + 273.15)
 
 # impose observed temperature on surface
 md.thermal.spctemperature = md.initialization.temperature

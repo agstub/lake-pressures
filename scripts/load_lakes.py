@@ -16,7 +16,7 @@ import numpy as np
 
 
 # import subglacial lake outlines (Siegfried & Fricker, 2018)
-h5f = h5py.File('../../Siegfried2021-GRL/data/outlines/SiegfriedFricker2018-outlines.h5', 'r')
+h5f = h5py.File('/Users/agstubbl/Desktop/Siegfried2021-GRL/data/outlines/SiegfriedFricker2018-outlines.h5', 'r')
 outline_geometries = [] # store polygons
 citations = [] # store citation information
 

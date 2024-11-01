@@ -14,8 +14,8 @@ import os
 def make_data(t_cycle,beta,eta,H):
 
     # make a directory for the data
-    if os.path.isdir('../data_synth')==False:
-        os.mkdir('../data_synth')
+    if os.path.isdir('../data/data_synth')==False:
+        os.mkdir('../data/data_synth')
 
     # define the scalar parameters in the problem
     # in practice we might use means of some of these fields around the lake
@@ -51,7 +51,7 @@ def make_data(t_cycle,beta,eta,H):
 
     # set basal vertical velocity anomaly to an oscillating gaussian
     sigma = (10*1000.0/H)/3.0
-    w_true = -5*np.exp(-0.5*(sigma**(-2))*(x**2+y**2))*np.sin(2*np.pi*t/t_cycle)
+    w_true = -5*np.exp(-0.5*(sigma**(-2))*(x**2+y**2))*np.cos(2*np.pi*t/t_cycle)
 
     # produce synthetic elevation anomaly by applying the forward operator
     # (returns fft of elevation), inverse fourier-transforming the results,

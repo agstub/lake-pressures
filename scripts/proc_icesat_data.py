@@ -34,8 +34,8 @@ def proc_data(lake_name,paths):
     data_name = 'data_'+lake_name
     if os.path.isdir('../data/'+data_name)==False:
         os.mkdir('../data/'+data_name)
-    x0 = float(outline.centroid.x)*1e3
-    y0 = float(outline.centroid.y)*1e3
+    x0 = float(outline.centroid.x.iloc[0])*1e3
+    y0 = float(outline.centroid.y.iloc[0])*1e3
 
     # STEP (II): Select half-width L0 of box surrounding lake
     L0 = 30*1000
@@ -94,7 +94,7 @@ def proc_data(lake_name,paths):
     for i in range(np.size(t)):
         
         plt.close()
-        plt.figure(figsize=(8,6))
+        plt.figure(figsize=(6,6))
         plt.title(r'$t=$ '+'{:.2f}'.format(t[i])+' d',fontsize=24)
         p = plt.contourf(X_sub/1e3,Y_sub/1e3,dh_sub[i,:,:],levels=levels,cmap='coolwarm',extend='both')
         outline.plot(edgecolor='k',facecolor='none',ax=plt.gca(),linewidth=3)
@@ -150,88 +150,14 @@ def proc_data(lake_name,paths):
     off_lake = dh_f-dh_loc
     off_lake = off_lake[:,0,0]
 
-    #---------------- viscosity and drag estimates ---------------------------------
-
-    fn = paths['wavi']
-    ds = nc.Dataset(fn)
-    x = ds['x'][:]                                   # m
-    y = ds['y'][:]                                   # m
-    beta = ds['Beta2'][:]*3.154e7                    # convert to Pa s/m
-    eta = ds['depth_averaged_viscosity'][:]*3.154e7  # convert to Pa s
-
-    ind_x = np.arange(0,np.size(x),1)
-    ind_y = np.arange(0,np.size(y),1)
-
-    x_sub = x[(x>=x_min)&(x<=x_max)]
-    y_sub = y[(y>=y_min)&(y<=y_max)]
-
-    inds_x = ind_x[(x>=x_min)&(x<=x_max)]
-    inds_y = ind_y[(y>=y_min)&(y<=y_max)]
-
-    inds_xy = np.ix_(inds_y,inds_x)
-
-    beta_mean = np.mean(beta[inds_xy])
-    eta_mean = np.mean(eta[inds_xy])
-
-
-    #------------------------ surface velocity -------------------------------------
-    fn = paths['measures']
-    ds = nc.Dataset(fn)
-    x = ds['x'][:]                  # m
-    y = ds['y'][:]                  # m
-    u = ds['VX'][:]                 # m/yr
-    v = ds['VY'][:]                 # m/yr
-
-
-    ind_x = np.arange(0,np.size(x),1)
-    ind_y = np.arange(0,np.size(y),1)
-
-    x_sub = x[(x>=x_min)&(x<=x_max)]
-    y_sub = y[(y>=y_min)&(y<=y_max)]
-
-    inds_x = ind_x[(x>=x_min)&(x<=x_max)]
-    inds_y = ind_y[(y>=y_min)&(y<=y_max)]
-
-    inds_xy = np.ix_(inds_y,inds_x)
-
-    u0 = u[inds_xy]
-    v0 = v[inds_xy]
-
-    u_mean = np.mean(u0)
-    v_mean = np.mean(v0)
-
-    #----------------------------- Bedmachine thickness ----------------------------
-    fn = paths['bedmachine']
-    ds = nc.Dataset(fn)
-    x = ds['x'][:]                                   # m
-    y = ds['y'][:]                                   # m
-    H = ds['thickness'][:]                           # ice thickness (m)
-  
-    ind_x = np.arange(0,np.size(x),1)
-    ind_y = np.arange(0,np.size(y),1)
-
-    x_sub = x[(x>=x_min)&(x<=x_max)]
-    y_sub = y[(y>=y_min)&(y<=y_max)]
-
-    inds_x = ind_x[(x>=x_min)&(x<=x_max)]
-    inds_y = ind_y[(y>=y_min)&(y<=y_max)]
-
-    inds_xy = np.ix_(inds_y,inds_x)
-
-    H_mean = np.mean(H[inds_xy])
 
     # ----------------------------- SAVE DATA --------------------------------------
-    np.save('../data/'+data_name+'/eta.npy',np.array([eta_mean]))    # viscosity: Pa s
-    np.save('../data/'+data_name+'/beta.npy',np.array([beta_mean]))  # basal drag: Pa s / m
-    np.save('../data/'+data_name+'/H.npy',np.array([H_mean]))        # thickness: m
-    np.save('../data/'+data_name+'/h_obs.npy',dh_loc)                # elevation anomaly: m
-    np.save('../data/'+data_name+'/off_lake.npy',off_lake)           # off-lake timeseries: m
-    np.save('../data/'+data_name+'/t.npy',(t_f-t_f[0])/365.0)        # time: yr
-    np.save('../data/'+data_name+'/u.npy',np.array([u_mean]))        # vel x: m/yr
-    np.save('../data/'+data_name+'/v.npy',np.array([v_mean]))        # vel y: m/yr
+    np.save('../data/'+data_name+'/h_obs.npy',dh_loc)          # elevation anomaly: (m)
+    np.save('../data/'+data_name+'/off_lake.npy',off_lake)     # off-lake timeseries: (m)
+    np.save('../data/'+data_name+'/t.npy',(t_f-t_f[0])/365.0)  # time: (yr)
+    np.save('../data/'+data_name+'/x_d.npy',x_f/1e3)           # x coord. (km)
+    np.save('../data/'+data_name+'/y_d.npy',y_f/1e3)           # y coord. (km)
 
-    np.save('../data/'+data_name+'/x.npy',(x_f-x_f.mean())/H_mean)   # x coord (scaled)
-    np.save('../data/'+data_name+'/y.npy',(y_f-y_f.mean())/H_mean)   # y coord (scaled)
 
-    np.save('../data/'+data_name+'/x_d.npy',x_f/1e3)     # x coord. for plotting results
-    np.save('../data/'+data_name+'/y_d.npy',y_f/1e3)     # y coord. for plotting results
+
+

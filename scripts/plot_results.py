@@ -37,7 +37,7 @@ def plot(t_ref,timesteps=range(Nt),h_lim=5,w_lim=5):
         for i in range(x_d.size):
             for j in range(y_d.size):
                 point = Point(x_d[i],y_d[j])
-                alt_bdry[i,j] = outline.contains(point)
+                alt_bdry[j,i] = outline.contains(point)
     else:
         xc,yc = 0,0
         alt_bdry = 0*xp+1
@@ -98,12 +98,6 @@ def plot(t_ref,timesteps=range(Nt),h_lim=5,w_lim=5):
         plt.plot(t0[0:j],dV_invs,color='royalblue',linewidth=4,label=r'inversion ($\Delta V_\mathrm{inv}$)')
         if j>1 or j==-1:
             err_pct = 100*np.max(np.abs(dV_alt-dV_invs))/np.max(np.abs(dV_alt))
-            # plt.plot([t0[-1],t0[-1]],[lower,upper],'k-',linewidth=4,clip_on=False)
-            # plt.plot([t0[-1]],[lower],'k-',marker='v',linewidth=5,markersize=8,clip_on=False)
-            # plt.plot([t0[-1]],[upper],'k-',marker='^',linewidth=5,markersize=8,clip_on=False)
-            # if t0[i] > t_r/3.154e7 or j==-1:
-            #     plt.annotate(xy=(1.01*t0[-1],mid),text='{:.0f}'.format(err_pct)+'% of \n$\max\,|\Delta V_\mathrm{alt}|$',fontsize=16, annotation_clip=False, verticalalignment='center') 
-
 
         if lake_name == 'synth' or lake_name == 'nonlinear':
             plt.plot(t0[0:j],dV_t,color='k',linestyle=':',linewidth=8,label=r'true solution')

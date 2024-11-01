@@ -5,7 +5,7 @@ from conj_grad import cg_solve,norm
 from operators import fwd,adj,A
 import numpy as np
 from kernel_fcns import fftd,ifftd
-from params import t,t0,x,kx,ky,Nx,lamda0,beta0,results_dir,u0,v0
+from params import t,t0,kx,ky,lamda0,results_dir,u0,v0
 from kernel_fcns import Rg
 import os
 from localization import localize

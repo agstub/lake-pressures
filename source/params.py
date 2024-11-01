@@ -2,7 +2,6 @@
 
 import numpy as np
 from scipy.fft import fftfreq
-import sys
 from metavars import lake_name
 # SET DATA DIRECTORY
 
@@ -17,11 +16,11 @@ t0 = np.load(data_dir+'/t.npy')       # time array (yr)
 x0 = np.load(data_dir+'/x.npy')       # x array (scaled by H)
 y0 = np.load(data_dir+'/y.npy')       # y array (scaled  by H)
 
-H = np.load(data_dir+'/H.npy').mean()       # ice thickness (m)
+H = np.load(data_dir+'/H.npy').mean()         # ice thickness (m)
 beta_d = np.load(data_dir+'/beta.npy').mean() # basal drag coeff (Pa s/m)
-eta_d = np.load(data_dir+'/eta.npy').mean()     # Newtonian ice viscosity (Pa s)
-u_d = np.load(data_dir+'/u.npy').mean()     # horizontal x ice velocity (m / yr)
-v_d = np.load(data_dir+'/v.npy').mean()     # horizontal y ice velocity (m / yr)
+eta_d = np.load(data_dir+'/eta.npy').mean()   # Newtonian ice viscosity (Pa s)
+u_d = np.load(data_dir+'/u.npy').mean()       # horizontal x ice velocity (m / yr)
+v_d = np.load(data_dir+'/v.npy').mean()       # horizontal y ice velocity (m / yr)
 
 #-------------------------------------------------------------------------------
 
@@ -45,7 +44,7 @@ dy = np.abs(y0[1]-y0[0])           # grid spacing in y direction
 h_sc = 1                    # elevation anomaly scale (1 m)
 t_sc = 3.154e7              # observational timescale (s) default 1 yr
 rho_i = 917                 # ice density (kg/m^3)
-rho_w = 1000                 # water density (kg/m^3)
+rho_w = 1000                # water density (kg/m^3)
 g = 9.81                    # gravitational acceleration (m/s^2)
 N_sc = rho_i*g*h_sc         # for calculating effective pressure
 
@@ -75,8 +74,8 @@ ky0 =  fftfreq(Ny,dy)
 # set zero frequency to small number because some of the integral kernels
 # have removable singularities at the zero frequency
 
-kx0[0] = 1e-20
-ky0[0] = 1e-20
+kx0[0] = 1e-15
+ky0[0] = 1e-15
 
 # mesh grids for physical space domain
 t,y,x = np.meshgrid(t0,y0,x0,indexing='ij')

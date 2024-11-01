@@ -97,9 +97,6 @@ T_ = InterpFromMeshToMesh2d(index, x1, y1, T_, md.mesh.x, md.mesh.y)
 
 md.initialization.temperature = T_
 
-# initialize temperature
-md.initialization.temperature = InterpFromGridToMesh(x_m, y_m, 260+0*vx_m, md.mesh.x, md.mesh.y, 0) 
-
 # impose observed temperature on surface
 md.thermal.spctemperature = md.initialization.temperature
 md.masstransport.spcthickness = np.nan * np.ones((md.mesh.numberofvertices))

@@ -7,6 +7,7 @@ from InterpFromGridToMesh import InterpFromGridToMesh
 from BamgTriangulate import BamgTriangulate
 from InterpFromMeshToMesh2d import InterpFromMeshToMesh2d
 from SetIceSheetBC import SetIceSheetBC
+from frictionweertman import frictionweertman
 import os
 ISSM_DIR = os.getenv('ISSM_DIR')
 
@@ -104,11 +105,13 @@ md.thermal.spctemperature = md.initialization.temperature
 md.masstransport.spcthickness = np.nan * np.ones((md.mesh.numberofvertices))
 
 # initialize basal friction
+
 md.friction.coefficient = 30 * np.ones((md.mesh.numberofvertices))
 pos = np.nonzero(md.mask.ocean_levelset < 0)
 md.friction.coefficient[pos] = 0  #no friction applied on floating ice
 md.friction.p = np.ones((md.mesh.numberofelements))
 md.friction.q = np.ones((md.mesh.numberofelements))
+
 
 # initialize ice rheology
 md.materials.rheology_n = 3 * np.ones((md.mesh.numberofelements))
